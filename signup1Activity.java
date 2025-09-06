@@ -30,7 +30,7 @@ public class signup1Activity extends AppCompatActivity {
         setContentView(R.layout.activity_signup); // XML 파일 이름에 맞게 수정
 
         editTextEmail = findViewById(R.id.editTextEmail2);
-        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextPassword = findViewById(R.id.editTextpassward);
         editTextId = findViewById(R.id.editTextId);
         Button buttonRegister = findViewById(R.id.buttonRegister);
 
