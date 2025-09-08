@@ -1,0 +1,9 @@
+package com.example.catchclone.data;
+public class Repository {
+    private static Repository INSTANCE;
+    private Restaurant r = null;
+    private Repository(){ r = new Restaurant(); r.name = "정미스시"; r.intro="노량진에서 그날그날 자연산 전문 스시야"; r.reviewCount = 414; r.phone="02-1234-5678"; r.notice="안녕하세요 정미스시입니다. 여기를 클릭해주세요..."; }
+    public static Repository get(){ if(INSTANCE==null) INSTANCE = new Repository(); return INSTANCE; }
+    public Restaurant getRestaurant(){ return r; }
+    public void save(Restaurant rr){ this.r = rr; }
+}
