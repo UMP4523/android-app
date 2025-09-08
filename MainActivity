@@ -1,0 +1,31 @@
+// com.example.catchclone.MainActivity.java
+package com.example.catchclone;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.catchclone.data.Repository;
+import com.google.android.material.button.MaterialButton;
+
+public class MainActivity extends AppCompatActivity {
+    @Override protected void onCreate(Bundle s){
+        super.onCreate(s);
+        setContentView(R.layout.activity_main);
+        // 예약 버튼 -> ReservationActivity
+        MaterialButton btnReserve = findViewById(R.id.btnReserve);
+        btnReserve.setOnClickListener(v -> {
+            startActivity(new Intent(this, com.example.catchclone.ui.reservation.ReservationActivity.class));
+        });
+        // 점주 등록 버튼(임시: 상단 우측 버튼) - 여기선 길게 누르면 점주 화면 진입
+        View overlay = findViewById(R.id.debugOwnerEntry);
+        overlay.setOnLongClickListener(v -> {
+            startActivity(new Intent(this, com.example.catchclone.ui.owner.OwnerRegisterActivity.class));
+            return true;
+        });
+
+        // 프래그먼트로 상세화면 로드
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new com.example.catchclone.ui.detail.RestaurantDetailFragment())
+                .commit();
+    }
+}
