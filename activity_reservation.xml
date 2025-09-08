@@ -1,0 +1,9 @@
+<!-- res/layout/activity_reservation.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+    android:padding="16dp" android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView android:id="@+id/txtTitle" android:textSize="20sp" android:textStyle="bold"/>
+    <Button android:id="@+id/btnPickDate" android:text="날짜 선택" android:layout_marginTop="12dp"/>
+    <Button android:id="@+id/btnPickTime" android:text="시간 선택" android:layout_marginTop="8dp"/>
+    <EditText android:id="@+id/edtPeople" android:hint="인원" android:inputType="number" android:layout_marginTop="12dp"/>
+    <Button android:id="@+id/btnConfirm" android:text="예약 확정" android:layout_marginTop="16dp" android:backgroundTint="@color/app_orange" android:textColor="#FFF"/>
+</LinearLayout>
