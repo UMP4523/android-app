@@ -1,0 +1,16 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:id="@+id/container" android:layout_width="match_parent" android:layout_height="match_parent"/>
+    <View android:id="@+id/debugOwnerEntry" android:layout_width="40dp" android:layout_height="40dp"
+        android:layout_gravity="top|end" android:layout_margin="12dp" android:background="@android:color/transparent"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnReserve"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="예약하기"
+        android:layout_margin="12dp"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/app_orange"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="16dp"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
