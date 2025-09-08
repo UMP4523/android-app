@@ -1,0 +1,84 @@
+package com.example.catchclone.ui.detail;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.*;
+import android.widget.*;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+import com.example.catchclone.R;
+import com.example.catchclone.data.Repository;
+import com.example.catchclone.data.Restaurant;
+import com.example.catchclone.ui.reservation.ReservationActivity;
+import java.util.List;
+
+public class RestaurantDetailFragment extends Fragment {
+    private Restaurant r;
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle s) {
+        View root = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
+        r = Repository.get().getRestaurant();
+
+        TextView tvName = root.findViewById(R.id.txtName);
+        TextView tvRating = root.findViewById(R.id.txtRating);
+        TextView tvReview = root.findViewById(R.id.txtReviewCount);
+        TextView tvIntro = root.findViewById(R.id.txtIntro);
+        LinearLayout chipGroup = root.findViewById(R.id.chipGroup);
+        LinearLayout policyChips = root.findViewById(R.id.policyChips);
+        TextView tvNotice = root.findViewById(R.id.txtNotice);
+        ImageView ivPhone = root.findViewById(R.id.ivCall);
+
+        tvName.setText(r.name);
+        tvRating.setText("★ " + r.rating);
+        tvReview.setText(" · 리뷰 " + r.reviewCount + "개");
+        tvIntro.setText(r.intro);
+        tvNotice.setText(r.notice);
+
+        // info chips
+        addChip(chipGroup, "압구정역에서 664m");
+        addChip(chipGroup, r.lunchOpen? "점심 영업":"점심 휴무");
+        addChip(chipGroup, r.dinnerOpen? r.dinnerPrice:"저녁 휴무");
+        addChip(chipGroup, "오늘(" + r.holiday + ") 휴무일");
+
+        // policy chips
+        if(r.max8) addChip(policyChips, "최대 8명 예약");
+        addChip(policyChips, r.depositFree? "예약금 0원":"예약금 있음");
+        if(r.valet) addChip(policyChips, "발렛");
+        if(r.corkage) addChip(policyChips, "콜키지");
+
+        // phone intent
+        ivPhone.setOnClickListener(v -> {
+            if(r.phone != null && !r.phone.isEmpty()){
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + r.phone)));
+            }else Toast.makeText(getContext(), "전화번호 없음", Toast.LENGTH_SHORT).show();
+        });
+
+        // 사진 slider: 간단히 유사 UI (ViewPager2에 텍스트 화)
+        ViewPager2 vp = root.findViewById(R.id.viewPager);
+        List<String> photos = r.photos;
+        vp.setAdapter(new PhotoPagerAdapter(photos));
+
+        // 예약 버튼 (프래그먼트 내부에 없어서 MainActivity의 하단 버튼으로도 동일 동작)
+        root.findViewById(R.id.btnReserveInline).setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), ReservationActivity.class));
+        });
+
+        return root;
+    }
+
+    private void addChip(LinearLayout container, String text){
+        TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_chip, container, false);
+        tv.setText(text);
+        container.addView(tv);
+    }
+
+    // 간단 ViewPager adapter (사진 대신 텍스트 박스)
+    private static class PhotoPagerAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<PhotoPagerAdapter.VH> {
+        private final java.util.List<String> items;
+        PhotoPagerAdapter(java.util.List<String> items){ this.items = items.isEmpty()? java.util.Arrays.asList("사진 없음") : items; }
+        static class VH extends androidx.recyclerview.widget.RecyclerView.ViewHolder { TextView t; VH(View v){ super(v); t = (TextView)v; } }
+        @Override public VH onCreateViewHolder(ViewGroup p, int v){ TextView tv = new TextView(p.getContext()); tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); tv.setGravity(Gravity.CENTER); tv.setTextSize(18); return new VH(tv); }
+        @Override public void onBindViewHolder(VH h, int pos){ h.t.setText(items.get(pos)); }
+        @Override public int getItemCount(){ return items.size(); }
+    }
+}
