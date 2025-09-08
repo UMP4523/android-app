@@ -1,0 +1,56 @@
+package com.example.catchclone.ui.reservation;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.catchclone.R;
+import com.example.catchclone.data.Repository;
+import com.example.catchclone.data.Restaurant;
+import com.example.catchclone.data.Restaurant; // reuse
+import com.example.catchclone.data.Restaurant;
+import java.util.Calendar;
+
+public class ReservationActivity extends AppCompatActivity {
+    private Button btnDate, btnTime, btnConfirm;
+    private EditText edtPeople;
+    private Calendar cal = Calendar.getInstance();
+    @Override protected void onCreate(Bundle s){
+        super.onCreate(s);
+        setContentView(R.layout.activity_reservation);
+        btnDate = findViewById(R.id.btnPickDate);
+        btnTime = findViewById(R.id.btnPickTime);
+        btnConfirm = findViewById(R.id.btnConfirm);
+        edtPeople = findViewById(R.id.edtPeople);
+
+        btnDate.setOnClickListener(v -> {
+            new DatePickerDialog(this, (view,y,m,d)-> {
+                cal.set(y,m,d);
+                btnDate.setText(String.format("%04d-%02d-%02d", y, m+1, d));
+            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
+        btnTime.setOnClickListener(v -> {
+            new TimePickerDialog(this, (view,h,minute)->{
+                cal.set(Calendar.HOUR_OF_DAY, h);
+                cal.set(Calendar.MINUTE, minute);
+                btnTime.setText(String.format("%02d:%02d", h, minute));
+            }, 18, 0, true).show();
+        });
+
+        btnConfirm.setOnClickListener(v -> {
+            String peopleS = edtPeople.getText().toString();
+            int people = 1;
+            try{ people = Integer.parseInt(peopleS); }catch (Exception ignored){}
+            // 데모: 실제 저장 로직(Repository에 저장 등) 필요
+            Toast.makeText(this, "예약확인: " + btnDate.getText() + " " + btnTime.getText() + " / " + people + "명", Toast.LENGTH_LONG).show();
+            finish();
+        });
+
+        // 본 가게 정보(예: 타이틀)
+        Restaurant r = Repository.get().getRestaurant();
+        TextView title = findViewById(R.id.txtTitle);
+        title.setText(r.name + " 예약");
+    }
+}
