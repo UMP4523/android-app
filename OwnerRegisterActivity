@@ -1,0 +1,80 @@
+package com.example.catchclone.ui.owner;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.catchclone.R;
+import com.example.catchclone.data.Repository;
+import com.example.catchclone.data.Restaurant;
+
+public class OwnerRegisterActivity extends AppCompatActivity {
+    private EditText edtName, edtIntro, edtLunchPrice, edtDinnerPrice, edtHoliday, edtPhone, edtNotice;
+    private CheckBox cbLunchOpen, cbDinnerOpen, cbValet, cbCorkage, cbMax8, cbDepositFree;
+    @Override protected void onCreate(Bundle s){
+        super.onCreate(s);
+        setContentView(R.layout.activity_owner_register);
+
+        edtName = findViewById(R.id.edtName);
+        edtIntro = findViewById(R.id.edtIntro);
+        edtLunchPrice = findViewById(R.id.edtLunchPrice);
+        edtDinnerPrice = findViewById(R.id.edtDinnerPrice);
+        edtHoliday = findViewById(R.id.edtHoliday);
+        edtPhone = findViewById(R.id.edtPhone);
+        edtNotice = findViewById(R.id.edtNotice);
+
+        cbLunchOpen = findViewById(R.id.cbLunchOpen);
+        cbDinnerOpen = findViewById(R.id.cbDinnerOpen);
+        cbValet = findViewById(R.id.cbValet);
+        cbCorkage = findViewById(R.id.cbCorkage);
+        cbMax8 = findViewById(R.id.cbMax8);
+        cbDepositFree = findViewById(R.id.cbDepositFree);
+
+        Button btnAddPhoto = findViewById(R.id.btnAddPhoto);
+        Button btnSave = findViewById(R.id.btnSave);
+
+        Restaurant r = Repository.get().getRestaurant();
+        loadToForm(r);
+
+        btnAddPhoto.setOnClickListener(v -> {
+            Toast.makeText(this, "사진 추가(예: 갤러리 호출) - 구현 필요", Toast.LENGTH_SHORT).show();
+        });
+
+        btnSave.setOnClickListener(v -> {
+            Restaurant nr = new Restaurant();
+            nr.name = edtName.getText().toString();
+            nr.intro = edtIntro.getText().toString();
+            nr.lunchPrice = edtLunchPrice.getText().toString();
+            nr.dinnerPrice = edtDinnerPrice.getText().toString();
+            nr.holiday = edtHoliday.getText().toString();
+            nr.phone = edtPhone.getText().toString();
+            nr.notice = edtNotice.getText().toString();
+            nr.lunchOpen = cbLunchOpen.isChecked();
+            nr.dinnerOpen = cbDinnerOpen.isChecked();
+            nr.valet = cbValet.isChecked();
+            nr.corkage = cbCorkage.isChecked();
+            nr.max8 = cbMax8.isChecked();
+            nr.depositFree = cbDepositFree.isChecked();
+            // photos 보존
+            nr.photos = Repository.get().getRestaurant().photos;
+            Repository.get().save(nr);
+            Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show();
+            finish();
+        });
+    }
+
+    private void loadToForm(Restaurant r){
+        edtName.setText(r.name);
+        edtIntro.setText(r.intro);
+        edtLunchPrice.setText(r.lunchPrice);
+        edtDinnerPrice.setText(r.dinnerPrice);
+        edtHoliday.setText(r.holiday);
+        edtPhone.setText(r.phone);
+        edtNotice.setText(r.notice);
+        cbLunchOpen.setChecked(r.lunchOpen);
+        cbDinnerOpen.setChecked(r.dinnerOpen);
+        cbValet.setChecked(r.valet);
+        cbCorkage.setChecked(r.corkage);
+        cbMax8.setChecked(r.max8);
+        cbDepositFree.setChecked(r.depositFree);
+    }
+}
