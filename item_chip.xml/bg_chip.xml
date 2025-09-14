@@ -1,14 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:paddingLeft="12dp" android:paddingRight="12dp" android:paddingTop="6dp" android:paddingBottom="6dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
     android:layout_marginRight="8dp"
     android:background="@drawable/bg_chip"
     android:textColor="@color/text_primary"
-    android:textSize="13sp"/>
+    android:textSize="13sp" />
+
+
+TextView chip = (TextView) LayoutInflater.from(context)
+        .inflate(R.layout.item_chip, parentLayout, false);
+chip.setText("콜키지 가능");
+parentLayout.addView(chip);  
 
 
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#F2F4F6"/>
-    <corners android:radius="14dp"/>
+
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- 배경 색상 -->
+    <solid android:color="#F2F4F6" />
+
+    <!-- 모서리 둥글게 -->
+    <corners android:radius="14dp" />
+
 </shape>
+
+적용 방법 xml 에 넣기 
+android:background="@drawable/bg_chip"
