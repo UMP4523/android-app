@@ -1,28 +1,124 @@
-<!-- res/layout/activity_owner_register.xml -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
-  <LinearLayout android:orientation="vertical" android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-    <EditText android:id="@+id/edtName" android:hint="매장명" android:layout_width="match_parent"/>
-    <EditText android:id="@+id/edtIntro" android:hint="한줄 소개" android:layout_width="match_parent"/>
-    <EditText android:id="@+id/edtLunchPrice" android:hint="점심 가격대" android:layout_width="match_parent"/>
-    <EditText android:id="@+id/edtDinnerPrice" android:hint="저녁 가격대" android:layout_width="match_parent"/>
-    <EditText android:id="@+id/edtHoliday" android:hint="정기휴무(예: 월)" android:layout_width="match_parent"/>
-    <EditText android:id="@+id/edtPhone" android:hint="전화번호" android:inputType="phone" android:layout_width="match_parent"/>
-    <EditText android:id="@+id/edtNotice" android:hint="공지 문구" android:layout_width="match_parent"/>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout android:orientation="horizontal" android:layout_marginTop="8dp">
-      <CheckBox android:id="@+id/cbLunchOpen" android:text="점심 영업"/>
-      <CheckBox android:id="@+id/cbDinnerOpen" android:text="저녁 영업"/>
-    </LinearLayout>
-    <LinearLayout android:orientation="horizontal">
-      <CheckBox android:id="@+id/cbValet" android:text="발렛"/>
-      <CheckBox android:id="@+id/cbCorkage" android:text="콜키지"/>
-    </LinearLayout>
-    <LinearLayout android:orientation="horizontal">
-      <CheckBox android:id="@+id/cbMax8" android:text="최대 8명 예약"/>
-      <CheckBox android:id="@+id/cbDepositFree" android:text="예약금 0원"/>
-    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button android:id="@+id/btnAddPhoto" android:text="사진 추가" android:layout_marginTop="10dp"/>
-    <Button android:id="@+id/btnSave" android:text="저장" android:layout_marginTop="12dp"/>
-  </LinearLayout>
+        <EditText
+            android:id="@+id/edtName"
+            android:hint="매장명"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtIntro"
+            android:hint="한줄 소개"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtLunchPrice"
+            android:hint="점심 가격대"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtDinnerPrice"
+            android:hint="저녁 가격대"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtHoliday"
+            android:hint="정기휴무(예: 월)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtPhone"
+            android:hint="전화번호"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/edtNotice"
+            android:hint="공지 문구"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/cbLunchOpen"
+                android:text="점심 영업"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                android:id="@+id/cbDinnerOpen"
+                android:text="저녁 영업"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/cbValet"
+                android:text="발렛"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                android:id="@+id/cbCorkage"
+                android:text="콜키지"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/cbMax8"
+                android:text="최대 8명 예약"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                android:id="@+id/cbDepositFree"
+                android:text="예약금 0원"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnAddPhoto"
+            android:text="사진 추가"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:text="저장"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 </ScrollView>
