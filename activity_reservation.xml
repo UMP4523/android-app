@@ -1,9 +1,52 @@
-<!-- res/layout/activity_reservation.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
-    android:padding="16dp" android:layout_width="match_parent" android:layout_height="match_parent">
-    <TextView android:id="@+id/txtTitle" android:textSize="20sp" android:textStyle="bold"/>
-    <Button android:id="@+id/btnPickDate" android:text="날짜 선택" android:layout_marginTop="12dp"/>
-    <Button android:id="@+id/btnPickTime" android:text="시간 선택" android:layout_marginTop="8dp"/>
-    <EditText android:id="@+id/edtPeople" android:hint="인원" android:inputType="number" android:layout_marginTop="12dp"/>
-    <Button android:id="@+id/btnConfirm" android:text="예약 확정" android:layout_marginTop="16dp" android:backgroundTint="@color/app_orange" android:textColor="#FFF"/>
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 상단 타이틀 -->
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="예약하기"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- 날짜 선택 버튼 -->
+    <Button
+        android:id="@+id/btnPickDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="날짜 선택"
+        android:layout_marginTop="12dp" />
+
+    <!-- 시간 선택 버튼 -->
+    <Button
+        android:id="@+id/btnPickTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="시간 선택"
+        android:layout_marginTop="8dp" />
+
+    <!-- 인원 입력 -->
+    <EditText
+        android:id="@+id/edtPeople"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="인원"
+        android:inputType="number"
+        android:layout_marginTop="12dp" />
+
+    <!-- 예약 확정 버튼 -->
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="예약 확정"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/app_orange"
+        android:textColor="#FFF" />
+
 </LinearLayout>
