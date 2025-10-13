@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 예약 섹션 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예약"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/text_select_date_person_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="날짜·인원·시간"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/border_rounded_grey"/>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/date_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_date_1_closed"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오늘 (월)\n휴무"
+                        android:enabled="false"
+                        android:backgroundTint="#E0E0E0"
+                        android:textColor="#A0A0A0"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Button
+                        android:id="@+id/button_date_2_closed"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="내일 (화)\n휴무"
+                        android:enabled="false"
+                        android:backgroundTint="#E0E0E0"
+                        android:textColor="#A0A0A0"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Button
+                        android:id="@+id/button_date_3"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9.31 (수)\n예약 가능"
+                        android:layout_marginEnd="8dp"/>
+                    <Button
+                        android:id="@+id/button_date_4"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10.1 (목)\n예약 가능"
+                        android:layout_marginEnd="8dp"/>
+                    <Button
+                        android:id="@+id/button_date_5"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10.2 (금)\n예약 가능"
+                        android:layout_marginEnd="8dp"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="8dp" android:background="#F0F0F0"/>
+
+        <!-- 소식 섹션 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="소식"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:padding="16dp"
+                android:background="@drawable/border_rounded_grey">
+                <TextView
+                    android:id="@+id/text_notice_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[대표] 소식 제목"
+                    android:textColor="#0000FF"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/text_notice_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="가게 소식 내용"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 편의시설 섹션 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="편의시설"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:weightSum="4">
+                <!-- 아이콘 + 텍스트 -->
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="발렛"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_crop"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="콜키지"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_myplaces"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="예약금 0원"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="노키즈존"/>
+                </LinearLayout>
+            </LinearLayout> <!-- 👈 짝이 맞지 않던 첫 번째 닫는 태그 -->
+        </LinearLayout> <!-- 👈 짝이 맞지 않던 두 번째 닫는 태그 -->
+
+    </LinearLayout>
+</ScrollView>
