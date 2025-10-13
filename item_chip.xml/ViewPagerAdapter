@@ -1,0 +1,36 @@
+package com.example.myapplication;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+public class ViewPagerAdapter extends FragmentStateAdapter {
+
+    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
+    }
+
+    @NonNull
+    @Override
+    public Fragment createFragment(int position) {
+        switch (position) {
+            case 1: // 소식 탭
+                return new NewsFragment();
+            case 2: // 메뉴 탭
+                return new MenuFragment();
+            case 4: // 리뷰 탭
+                return new ReviewFragment();
+            case 5: // 매장정보 탭
+                return new StoreInfoFragment();
+            default: // 홈 탭 (0번 및 나머지)
+                return new HomeFragment();
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        // 전체 탭 개수는 6개 (홈, 소식, 메뉴, 사진, 리뷰, 매장정보)
+        return 6;
+    }
+}
