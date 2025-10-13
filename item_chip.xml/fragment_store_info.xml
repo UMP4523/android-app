@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:scrollbars="none">
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true">
+                <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Action" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="매장소개"/>
+                <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Action" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="위치"/>
+                <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Action" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="편의시설"/>
+                <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Action" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="상세정보"/>
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="매장소개"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="민규는 워터에이징으로 숙성한 1++ 한우 다이닝입니다.\n전 좌석 고기전문 그릴링서버가 있는 프라이빗 룸으로 준비되어 있으며, 한우구이와 관서풍 스키야키를 전문으로 판매하고 있습니다."/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="8dp" android:background="#F0F0F0"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위치"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_menu1"
+                android:contentDescription="지도 이미지" />
+
+            <TextView android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="찾아오는 방법" android:textStyle="bold"/>
+            <TextView android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="삼성동 맛집 '민규 삼성점' 오시는 길\n*주차안내*\n*주차장소: 삼성동 퍼스트 주차타워\n*주차시간: 무료 2시간, 이후 10분 1,000원\n*주소: 서울 강남구 삼성동 148-6"/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="8dp" android:background="#F0F0F0"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="편의시설"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+                <TableRow>
+                    <LinearLayout android:layout_weight="1" android:gravity="center" android:orientation="vertical" android:padding="8dp"><ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_mylocation"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="주차"/></LinearLayout>
+                    <LinearLayout android:layout_weight="1" android:gravity="center" android:orientation="vertical" android:padding="8dp"><ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_crop"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="콜키지 프리"/></LinearLayout>
+                </TableRow>
+                <TableRow>
+                    <LinearLayout android:layout_weight="1" android:gravity="center" android:orientation="vertical" android:padding="8dp"><ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_mapmode"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="웰컴키즈존"/></LinearLayout>
+                    <LinearLayout android:layout_weight="1" android:gravity="center" android:orientation="vertical" android:padding="8dp"><ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_myplaces"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="아기의자"/></LinearLayout>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="8dp" android:background="#F0F0F0"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상세 정보"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <TextView android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="전화번호" android:textStyle="bold"/>
+            <TextView android:layout_marginTop="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="02-553-0331" android:textColor="#0000FF"/>
+
+            <TextView android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="영업시간" android:textStyle="bold"/>
+            <TextView android:layout_marginTop="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="매일 점심 11:30 ~ 15:00\n저녁 17:00 ~ 22:00\n21:00 까지 라스트오더"/>
+
+            <TextView android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="룸 안내" android:textStyle="bold"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                <ImageView android:layout_width="100dp" android:layout_height="100dp" android:scaleType="centerCrop" android:src="@drawable/img_menu2"/>
+                <ImageView android:layout_width="100dp" android:layout_height="100dp" android:layout_marginStart="8dp" android:scaleType="centerCrop" android:src="@drawable/img_menu1"/>
+            </LinearLayout>
+            <TextView android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4인룸 1-4인 이용 금액 무료\n6인룸 1-6인 이용 금액 무료\n8인룸 4-8인 이용 금액 무료"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
