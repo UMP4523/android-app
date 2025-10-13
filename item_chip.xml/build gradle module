@@ -1,0 +1,57 @@
+plugins {
+    alias(libs.plugins.android.application)
+    // KTS 파일을 사용하고 Kotlin 기반 프로젝트를 위해 플러그인을 추가했습니다.
+    alias(libs.plugins.jetbrains.kotlin.android)
+}
+
+android {
+    namespace = "com.example.myapplication"
+    // compileSdk는 현재 가장 안정적인 최신 버전인 34로 설정하는 것을 권장합니다.
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.myapplication"
+        minSdk = 28
+        // targetSdk 역시 플레이스토어 정책 및 안정성을 위해 최신 안정 버전으로 설정합니다.
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        // 안드로이드에서 가장 널리 쓰이고 안정적인 Java 8 버전으로 설정했습니다.
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    // 자바 프로젝트라도 이 옵션이 필요할 수 있습니다.
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    // 가장 중요한 View Binding 기능 활성화 코드를 추가했습니다.
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation(libs.appcompat)
+    implementation(libs.material) // libs.material이 이미 있으므로 아래 중복된 코드는 제거했습니다.
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
+    // implementation("com.google.android.material:material:1.11.0") // 이 줄은 libs.material과 중복되므로 제거합니다.
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+}
