@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".StoreRegistrationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가게 정보 등록"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- 1. 가게 이름 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_store_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 이름">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_store_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 가게 사진 -->
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="가게 대표 사진"/>
+
+        <ImageView
+            android:id="@+id/image_store_photo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="가게 대표 사진"/>
+
+        <Button
+            android:id="@+id/button_add_store_photo"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="사진 추가/변경"/>
+
+        <!-- 2. 가게 전화번호 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_store_phone"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="가게 전화번호">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_store_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 3. 가게 위치 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_store_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="가게 주소">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_store_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- TODO: 지도 API 연동 시 지도 표시 영역 추가 -->
+
+        <!-- 4. 가게 소식 (여러 개 등록 가능하도록 RecyclerView 고려) -->
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="가게 소식 관리"/>
+        <!-- TODO: RecyclerView 또는 동적 추가 버튼 구현 -->
+        <Button
+            android:id="@+id/button_manage_news"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="소식 추가/수정"/>
+
+        <!-- 5. 가게 메뉴 (여러 개 등록 가능하도록 RecyclerView 고려) -->
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="가게 메뉴 관리"/>
+        <!-- TODO: RecyclerView 또는 동적 추가 버튼 구현 -->
+        <Button
+            android:id="@+id/button_manage_menu"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="메뉴 추가/수정"/>
+
+        <!-- 6. 가게 정보 (상세 설명) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_store_description"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="가게 상세 정보 (소개글 등)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_store_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="3"
+                android:gravity="top"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 7. 예약 기준 (식사 시간, 테이블 정보 등) -->
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="예약 기준 설정"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_dining_duration"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="평균 식사 시간 (분)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_dining_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- TODO: 테이블 관리 기능 (개수, 인원) 추가 버튼 -->
+        <Button
+            android:id="@+id/button_manage_tables"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="테이블 설정"/>
+
+        <!-- 8. 휴무일 -->
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="휴무일 설정"/>
+        <!-- TODO: 요일 선택 CheckBox 또는 특정 날짜 선택 기능 구현 -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipgroup_holidays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="월"/>
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="화"/>
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="수"/>
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="목"/>
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="금"/>
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="토"/>
+            <com.google.android.material.chip.Chip style="@style/Widget.MaterialComponents.Chip.Filter" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="일"/>
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- 저장 버튼 -->
+        <Button
+            android:id="@+id/button_save_store_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="저장하기"/>
+
+    </LinearLayout>
+</ScrollView>
