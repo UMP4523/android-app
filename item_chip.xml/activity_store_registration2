@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사업자 등록 신청"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- 사업자 등록증 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사업자등록증 (필수)"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"/>
+        <ImageView
+            android:id="@+id/image_business_license"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="사업자등록증"/>
+        <Button
+            android:id="@+id/button_select_business_license"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 선택"/>
+
+        <!-- 통장 사본 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="통장 사본 (대표/업체 명의)"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+        <ImageView
+            android:id="@+id/image_bank_book"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="통장 사본"/>
+        <Button
+            android:id="@+id/button_select_bank_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 선택"/>
+
+        <!-- 신분증 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="신분증 (대표자)"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+        <ImageView
+            android:id="@+id/image_id_card"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="신분증"/>
+        <Button
+            android:id="@+id/button_select_id_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 선택"/>
+
+        <!-- 가게 정보 -->
+        <EditText
+            android:id="@+id/edit_store_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 이름"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/edit_store_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="전화번호"/>
+
+        <EditText
+            android:id="@+id/edit_store_address2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="주소"/>
+
+        <EditText
+            android:id="@+id/edit_store_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="가게 설명"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/edit_dining_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="식사 소요 시간(분)"/>
+
+        <!-- 휴무일 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="휴무일"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox android:id="@+id/check_mon" android:text="월"/>
+            <CheckBox android:id="@+id/check_tue" android:text="화"/>
+            <CheckBox android:id="@+id/check_wed" android:text="수"/>
+            <CheckBox android:id="@+id/check_thu" android:text="목"/>
+            <CheckBox android:id="@+id/check_fri" android:text="금"/>
+            <CheckBox android:id="@+id/check_sat" android:text="토"/>
+            <CheckBox android:id="@+id/check_sun" android:text="일"/>
+        </LinearLayout>
+
+        <!-- 버튼들 -->
+        <Button
+            android:id="@+id/button_add_store_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대표사진 선택"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/button_manage_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="메뉴 관리"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/button_manage_news"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="소식 관리"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/button_manage_tables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="테이블 정보 수정"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#FFA000"
+            android:textColor="#FFFFFF"/>
+
+        <Button
+            android:id="@+id/button_save_store_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="등록 제출"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#00C851"
+            android:textColor="#FFFFFF"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="가게 사업자 등록 완료까지 걸리는 시간은 일반적으로 신청일로부터 평일 기준 2일 이내입니다. 하지만 사업 유형이나 서류 보완 필요 여부에 따라 지연될 수 있습니다."
+            android:textSize="14sp"
+            android:layout_marginTop="16dp"
+            android:textColor="#666666"/>
+
+    </LinearLayout>
+</ScrollView>
