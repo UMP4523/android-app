@@ -1,0 +1,105 @@
+package kr.ac.doowon.makesalfapp;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class BusinessRegistrationActivity extends AppCompatActivity {
+
+    private ImageView imageBusinessLicense;
+    private ImageView imageBankBook;
+    private ImageView imageIDCard;
+
+    private Button buttonSelectBusinessLicense;
+    private Button buttonSelectBankBook;
+    private Button buttonSelectIDCard;
+
+    private Button buttonSubmitRegistration;
+
+    private Uri selectedBusinessLicenseUri;
+    private Uri selectedBankBookUri;
+    private Uri selectedIDCardUri;
+
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private String currentSelection = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_business_registration);
+
+        // --- XML View 연결 ---
+        imageBusinessLicense = findViewById(R.id.image_business_license);
+        imageBankBook = findViewById(R.id.image_bank_book);
+        imageIDCard = findViewById(R.id.image_id_card);
+
+        buttonSelectBusinessLicense = findViewById(R.id.button_select_business_license);
+        buttonSelectBankBook = findViewById(R.id.button_select_bank_book);
+        buttonSelectIDCard = findViewById(R.id.button_select_id_card);
+
+        buttonSubmitRegistration = findViewById(R.id.button_submit_registration);
+
+        setupGalleryLauncher();
+
+        // --- 클릭 리스너 ---
+        buttonSelectBusinessLicense.setOnClickListener(v -> openGallery("businessLicense"));
+        buttonSelectBankBook.setOnClickListener(v -> openGallery("bankBook"));
+        buttonSelectIDCard.setOnClickListener(v -> openGallery("idCard"));
+
+        buttonSubmitRegistration.setOnClickListener(v -> submitRegistration());
+    }
+
+    private void setupGalleryLauncher() {
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        if (imageUri != null) {
+                            switch (currentSelection) {
+                                case "businessLicense":
+                                    selectedBusinessLicenseUri = imageUri;
+                                    imageBusinessLicense.setImageURI(imageUri);
+                                    break;
+                                case "bankBook":
+                                    selectedBankBookUri = imageUri;
+                                    imageBankBook.setImageURI(imageUri);
+                                    break;
+                                case "idCard":
+                                    selectedIDCardUri = imageUri;
+                                    imageIDCard.setImageURI(imageUri);
+                                    break;
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void openGallery(String selectionType) {
+        currentSelection = selectionType;
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        galleryLauncher.launch(intent);
+    }
+
+    private void submitRegistration() {
+        if (selectedBusinessLicenseUri == null || selectedBankBookUri == null || selectedIDCardUri == null) {
+            Toast.makeText(this, "모든 이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 임시 저장 처리 (Firebase 없이)
+        Toast.makeText(this, "사업자 등록 신청 완료!\n평일 기준 2일 이내 처리됩니다.", Toast.LENGTH_LONG).show();
+        finish(); // 화면 종료
+    }
+}
