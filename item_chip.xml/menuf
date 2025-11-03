@@ -1,0 +1,200 @@
+// 사용자의 패키지 이름
+package kr.ac.doowon.makesalfapp;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+// import java.util.List; // (ArrayList를 쓰므로 List는 필요X)
+
+public class MenuManagementActivity extends AppCompatActivity {
+
+    private LinearLayout menuListContainer;
+    private Button buttonAddMenu;
+    private Uri selectedImageUri;
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private ImageView currentDialogImageView;
+
+    // --- 클래스명 변경 (MenuItem -> MenuData) ---
+    private ArrayList<MenuData> menuItems = new ArrayList<>();
+
+    // --- 키 이름 변경 (가독성을 위해) ---
+    private static final String KEY_MENU_DATA_LIST = "key_menu_data_list";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // XML 레이아웃 파일 이름을 정확히 확인하세요 (예: R.layout.activity_menu_management)
+        setContentView(R.layout.activity_menu_management); 
+
+        menuListContainer = findViewById(R.id.menu_list_container);
+        buttonAddMenu = findViewById(R.id.button_add_menu);
+
+        if (savedInstanceState != null) {
+            // --- 클래스명 변경 (MenuItem -> MenuData) ---
+            menuItems = savedInstanceState.getParcelableArrayList(KEY_MENU_DATA_LIST);
+            if (menuItems == null) {
+                menuItems = new ArrayList<>();
+            }
+            rebuildMenuList();
+        }
+
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null && currentDialogImageView != null) {
+                            Glide.with(this).load(selectedImageUri).into(currentDialogImageView);
+                        }
+                    }
+                }
+        );
+
+        buttonAddMenu.setOnClickListener(v -> openAddMenuDialog());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // --- 키 및 변수명 변경 ---
+        outState.putParcelableArrayList(KEY_MENU_DATA_LIST, menuItems);
+    }
+
+    private void rebuildMenuList() {
+        menuListContainer.removeAllViews();
+        // --- 클래스명 변경 (MenuItem -> MenuData) ---
+        for (MenuData item : menuItems) {
+            addMenuToLayout(item);
+        }
+    }
+
+    private void openAddMenuDialog() {
+        // XML 다이얼로그 레이아웃 이름을 정확히 확인하세요 (예: R.layout.dialog_add_menu)
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null);
+
+        TextInputEditText editMenuName = dialogView.findViewById(R.id.edit_menu_name);
+        TextInputEditText editMenuPrice = dialogView.findViewById(R.id.edit_menu_price);
+        currentDialogImageView = dialogView.findViewById(R.id.image_menu_preview);
+        Button buttonSelectImage = dialogView.findViewById(R.id.button_select_image);
+        Button buttonSaveMenu = dialogView.findViewById(R.id.button_save_menu);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        dialog.setOnDismissListener(d -> {
+            currentDialogImageView = null;
+            selectedImageUri = null;
+        });
+
+        buttonSelectImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            galleryLauncher.launch(intent);
+        });
+
+        buttonSaveMenu.setOnClickListener(v -> {
+            String name = editMenuName.getText() != null ? editMenuName.getText().toString().trim() : "";
+            String price = editMenuPrice.getText() != null ? editMenuPrice.getText().toString().trim() : "";
+
+            if (name.isEmpty() || price.isEmpty()) {
+                Toast.makeText(this, "메뉴 이름과 가격을 입력하세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // --- 클래스명 변경 (MenuItem -> MenuData) ---
+            MenuData newItem = new MenuData(name, price, selectedImageUri);
+            menuItems.add(newItem);
+            addMenuToLayout(newItem);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    // --- 클래스명 변경 (MenuItem -> MenuData) ---
+    private void addMenuToLayout(MenuData menuData) {
+        // XML 메뉴 항목 레이아웃 이름을 정확히 확인하세요 (예: R.layout.menu_item_entry)
+        View menuItemView = LayoutInflater.from(this).inflate(R.layout.menu_item_entry, menuListContainer, false);
+
+        ImageView imageMenu = menuItemView.findViewById(R.id.image_menu);
+        TextView textName = menuItemView.findViewById(R.id.text_menu_name);
+        TextView textPrice = menuItemView.findViewById(R.id.text_menu_price);
+
+        textName.setText(menuData.name);
+        textPrice.setText(menuData.price + "원");
+
+        if (menuData.imageUri != null) {
+            Glide.with(this).load(menuData.imageUri).into(imageMenu);
+        }
+
+        menuListContainer.addView(menuItemView);
+    }
+
+    //
+    // --- (★ 중요) 클래스 이름 변경: MenuItem -> MenuData ---
+    //
+    public static class MenuData implements android.os.Parcelable {
+        public String name;
+        public String price;
+        public Uri imageUri;
+
+        public MenuData() {}
+
+        public MenuData(String name, String price, Uri imageUri) {
+            this.name = name;
+            this.price = price;
+            this.imageUri = imageUri;
+        }
+
+        // --- Parcelable 구현 (이름만 MenuData로 변경) ---
+        protected MenuData(android.os.Parcel in) {
+            name = in.readString();
+            price = in.readString();
+            imageUri = in.readParcelable(Uri.class.getClassLoader());
+        }
+
+        public static final android.os.Parcelable.Creator<MenuData> CREATOR = new android.os.Parcelable.Creator<MenuData>() {
+            @Override
+            public MenuData createFromParcel(android.os.Parcel in) {
+                return new MenuData(in);
+            }
+
+            @Override
+            public MenuData[] newArray(int size) {
+                return new MenuData[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(android.os.Parcel dest, int flags) {
+            dest.writeString(name);
+            dest.writeString(price);
+            dest.writeParcelable(imageUri, flags);
+        }
+        // --- ---
+    }
+}
