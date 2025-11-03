@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사업자 등록 신청"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- 사업자 등록증 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사업자등록증 (필수)"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"/>
+        <ImageView
+            android:id="@+id/image_business_license"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="사업자등록증"/>
+        <Button
+            android:id="@+id/button_select_business_license"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 선택"/>
+
+        <!-- 통장 사본 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="통장 사본 (대표/업체 명의)"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+        <ImageView
+            android:id="@+id/image_bank_book"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="통장 사본"/>
+        <Button
+            android:id="@+id/button_select_bank_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 선택"/>
+
+        <!-- 신분증 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="신분증 (대표자)"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+        <ImageView
+            android:id="@+id/image_id_card"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="신분증"/>
+        <Button
+            android:id="@+id/button_select_id_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 선택"/>
+
+        <!-- 저장 버튼 -->
+        <Button
+            android:id="@+id/button_submit_registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="등록 제출"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#00C851"
+            android:textColor="#FFFFFF"/>
+
+        <!-- 안내문 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="가게 사업자 등록 완료까지 걸리는 시간은 일반적으로 신청일로부터 평일 기준 2일 이내입니다. 하지만 사업 유형이나 서류 보완 필요 여부에 따라 지연될 수 있습니다."
+            android:textSize="14sp"
+            android:layout_marginTop="16dp"
+            android:textColor="#666666"/>
+    </LinearLayout>
+</ScrollView>
