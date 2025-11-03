@@ -1,0 +1,225 @@
+package kr.ac.doowon.makesalfapp; // 사용자의 패키지 이름
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences; // SharedPreferences 임포트
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputEditText;
+
+// Gson 라이브러리 임포트
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+public class MenuManagementActivity extends AppCompatActivity {
+
+    private LinearLayout menuListContainer;
+    private Button buttonAddMenu;
+    private Uri selectedImageUri;
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private ImageView currentDialogImageView;
+
+    private ArrayList<MenuData> menuItems = new ArrayList<>();
+
+    // --- SharedPreferences 및 Gson 설정을 위한 변수 추가 ---
+    private static final String PREFS_NAME = "MenuPrefs"; // 저장소 파일 이름
+    private static final String KEY_MENU_DATA_LIST = "key_menu_data_list";
+    private Gson gson = new Gson(); // Gson 객체 생성
+    // ---
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_menu_management);
+
+        menuListContainer = findViewById(R.id.menu_list_container);
+        buttonAddMenu = findViewById(R.id.button_add_menu);
+
+        // --- (변경) 임시 저장(savedInstanceState) 대신 영구 저장소에서 'loadData' ---
+        loadData();
+        // 불러온 데이터로 UI를 다시 그립니다.
+        rebuildMenuList();
+        // ---
+
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null && currentDialogImageView != null) {
+                            Glide.with(this).load(selectedImageUri).into(currentDialogImageView);
+                        }
+                    }
+                }
+        );
+
+        buttonAddMenu.setOnClickListener(v -> openAddMenuDialog());
+    }
+
+    // --- (제거) onSaveInstanceState 메서드는 더 이상 필요 없음 ---
+    /*
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // ... (이전 코드 제거) ...
+    }
+    */
+
+    // --- (추가) SharedPreferences에서 데이터를 불러오는 메서드 ---
+    private void loadData() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        // 저장된 JSON 텍스트를 불러옵니다.
+        String json = prefs.getString(KEY_MENU_DATA_LIST, null);
+        
+        if (json != null) {
+            // JSON 텍스트를 ArrayList<MenuData> 타입으로 변환
+            Type type = new TypeToken<ArrayList<MenuData>>() {}.getType();
+            menuItems = gson.fromJson(json, type);
+            
+            // 만약 불러온 리스트가 null이면(예: 저장 형식이 깨졌을 때) 새로 생성
+            if (menuItems == null) {
+                menuItems = new ArrayList<>();
+            }
+        } else {
+            // 저장된 데이터가 없으면 빈 리스트로 시작
+            menuItems = new ArrayList<>();
+        }
+    }
+
+    // --- (추가) SharedPreferences에 데이터를 저장하는 메서드 ---
+    private void saveData() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        // 현재 menuItems 리스트를 JSON 텍스트로 변환
+        String json = gson.toJson(menuItems);
+        // JSON 텍스트를 저장소에 씁니다.
+        editor.putString(KEY_MENU_DATA_LIST, json);
+        editor.apply(); // 저장 실행
+    }
+    
+    // --- (유지) 리스트 데이터를 기반으로 UI를 다시 만드는 메서드 ---
+    private void rebuildMenuList() {
+        menuListContainer.removeAllViews();
+        for (MenuData item : menuItems) {
+            addMenuToLayout(item);
+        }
+    }
+
+    private void openAddMenuDialog() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null);
+
+        TextInputEditText editMenuName = dialogView.findViewById(R.id.edit_menu_name);
+        TextInputEditText editMenuPrice = dialogView.findViewById(R.id.edit_menu_price);
+        currentDialogImageView = dialogView.findViewById(R.id.image_menu_preview);
+        Button buttonSelectImage = dialogView.findViewById(R.id.button_select_image);
+        Button buttonSaveMenu = dialogView.findViewById(R.id.button_save_menu);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        dialog.setOnDismissListener(d -> {
+            currentDialogImageView = null;
+            selectedImageUri = null;
+        });
+
+        buttonSelectImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            galleryLauncher.launch(intent);
+        });
+
+        buttonSaveMenu.setOnClickListener(v -> {
+            String name = editMenuName.getText() != null ? editMenuName.getText().toString().trim() : "";
+            String price = editMenuPrice.getText() != null ? editMenuPrice.getText().toString().trim() : "";
+
+            if (name.isEmpty() || price.isEmpty()) {
+                Toast.makeText(this, "메뉴 이름과 가격을 입력하세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            MenuData newItem = new MenuData(name, price, selectedImageUri);
+            menuItems.add(newItem);
+    
+            // UI에 즉시 반영
+            addMenuToLayout(newItem);
+
+            // --- (중요) 새 항목이 추가되었으니 영구 저장소에 'saveData' ---
+            saveData();
+            // ---
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    // --- (변경) getImageUri() 헬퍼 메서드 사용 ---
+    private void addMenuToLayout(MenuData menuData) {
+        View menuItemView = LayoutInflater.from(this).inflate(R.layout.menu_item_entry, menuListContainer, false);
+
+        ImageView imageMenu = menuItemView.findViewById(R.id.image_menu);
+        TextView textName = menuItemView.findViewById(R.id.text_menu_name);
+        TextView textPrice = menuItemView.findViewById(R.id.text_menu_price);
+
+        textName.setText(menuData.name);
+        textPrice.setText(menuData.price + "원");
+
+        // 저장된 String을 다시 Uri 객체로 변환하여 사용
+        Uri imageUri = menuData.getImageUri();
+        if (imageUri != null) {
+            Glide.with(this).load(imageUri).into(imageMenu);
+        }
+
+        menuListContainer.addView(menuItemView);
+    }
+
+
+    // --- (변경) MenuData 클래스 수정 ---
+    // Gson을 사용하므로 Parcelable은 더 이상 필요 없으며,
+    // Uri는 String으로 변환해서 저장해야 합니다.
+    public static class MenuData {
+        public String name;
+        public String price;
+        public String imageUriString; // Uri 객체 대신 String으로 저장
+
+        public MenuData() {}
+
+        public MenuData(String name, String price, Uri imageUri) {
+            this.name = name;
+            this.price = price;
+            // Uri를 String으로 변환하여 저장
+            if (imageUri != null) {
+                this.imageUriString = imageUri.toString();
+            } else {
+                this.imageUriString = null;
+            }
+        }
+
+        // String을 다시 Uri 객체로 변환해주는 헬퍼(도우미) 메서드
+        public Uri getImageUri() {
+            if (imageUriString != null) {
+                return Uri.parse(imageUriString);
+            }
+            return null;
+        }
+
+        // --- (제거) Parcelable 관련 코드는 모두 삭제 ---
+    }
+}
