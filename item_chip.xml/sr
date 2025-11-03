@@ -1,0 +1,156 @@
+package kr.ac.doowon.makesalfapp;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class StoreRegistrationActivity extends AppCompatActivity {
+
+    private static final int PICK_IMAGE_REQUEST = 101;
+
+    private EditText editStoreName, editStorePhone, editStoreAddress, editStoreDescription, editDiningDuration;
+    private ImageView imageStorePhoto;
+    private Button buttonAddPhoto, buttonManageMenu, buttonManageNews, buttonSaveStoreInfo;
+    private CheckBox checkMon, checkTue, checkWed, checkThu, checkFri, checkSat, checkSun;
+
+    private Uri photoUri;
+
+    // Firebase
+    private DatabaseReference databaseReference;
+    private StorageReference storageReference;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_store_registration);
+
+        // Firebase 초기화
+        databaseReference = FirebaseDatabase.getInstance().getReference("stores");
+        storageReference = FirebaseStorage.getInstance().getReference("store_photos");
+
+        // 뷰 초기화
+        editStoreName = findViewById(R.id.edit_store_name);
+        editStorePhone = findViewById(R.id.edit_store_phone);
+        editStoreAddress = findViewById(R.id.edit_store_address);
+        editStoreDescription = findViewById(R.id.edit_store_description);
+        editDiningDuration = findViewById(R.id.edit_dining_duration);
+
+        imageStorePhoto = findViewById(R.id.image_store_photo);
+        buttonAddPhoto = findViewById(R.id.button_add_store_photo);
+        buttonManageMenu = findViewById(R.id.button_manage_menu);
+        buttonManageNews = findViewById(R.id.button_manage_news);
+        buttonSaveStoreInfo = findViewById(R.id.button_save_store_info);
+
+        checkMon = findViewById(R.id.check_mon);
+        checkTue = findViewById(R.id.check_tue);
+        checkWed = findViewById(R.id.check_wed);
+        checkThu = findViewById(R.id.check_thu);
+        checkFri = findViewById(R.id.check_fri);
+        checkSat = findViewById(R.id.check_sat);
+        checkSun = findViewById(R.id.check_sun);
+
+        // 클릭 이벤트
+        buttonAddPhoto.setOnClickListener(v -> openFileChooser());
+        buttonManageMenu.setOnClickListener(v -> {
+            Intent intent = new Intent(StoreRegistrationActivity.this, MenuManagementActivity.class);
+            startActivity(intent);
+        });
+        buttonManageNews.setOnClickListener(v -> {
+            Intent intent = new Intent(StoreRegistrationActivity.this, NewsManagementActivity.class);
+            startActivity(intent);
+        });
+        buttonSaveStoreInfo.setOnClickListener(v -> saveStoreInfo());
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "사진 선택"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            photoUri = data.getData();
+            imageStorePhoto.setImageURI(photoUri);
+        }
+    }
+
+    private void saveStoreInfo() {
+        String name = editStoreName.getText().toString().trim();
+        String phone = editStorePhone.getText().toString().trim();
+        String address = editStoreAddress.getText().toString().trim();
+        String description = editStoreDescription.getText().toString().trim();
+        String diningDuration = editDiningDuration.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name)) {
+            editStoreName.setError("가게 이름을 입력하세요");
+            return;
+        }
+
+        if (photoUri != null) {
+            // Firebase Storage 업로드
+            StorageReference fileRef = storageReference.child(System.currentTimeMillis() + ".jpg");
+            fileRef.putFile(photoUri).addOnSuccessListener(taskSnapshot ->
+                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        uploadStoreData(name, phone, address, description, diningDuration, uri.toString());
+                    })
+            ).addOnFailureListener(e ->
+                    Toast.makeText(StoreRegistrationActivity.this, "사진 업로드 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+            );
+        } else {
+            // 사진 없을 경우
+            uploadStoreData(name, phone, address, description, diningDuration, null);
+        }
+    }
+
+    private void uploadStoreData(String name, String phone, String address, String description, String duration, String photoUrl) {
+        String storeId = databaseReference.push().getKey();
+
+        Map<String, Object> storeData = new HashMap<>();
+        storeData.put("id", storeId);
+        storeData.put("name", name);
+        storeData.put("phone", phone);
+        storeData.put("address", address);
+        storeData.put("description", description);
+        storeData.put("diningDuration", duration);
+        storeData.put("photoUrl", photoUrl);
+
+        // 휴무일
+        Map<String, Boolean> holidays = new HashMap<>();
+        holidays.put("mon", checkMon.isChecked());
+        holidays.put("tue", checkTue.isChecked());
+        holidays.put("wed", checkWed.isChecked());
+        holidays.put("thu", checkThu.isChecked());
+        holidays.put("fri", checkFri.isChecked());
+        holidays.put("sat", checkSat.isChecked());
+        holidays.put("sun", checkSun.isChecked());
+
+        storeData.put("holidays", holidays);
+
+        databaseReference.child(storeId).setValue(storeData)
+                .addOnSuccessListener(aVoid -> Toast.makeText(StoreRegistrationActivity.this, "가게 정보 등록 완료", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(StoreRegistrationActivity.this, "등록 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+}
