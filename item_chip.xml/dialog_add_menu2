@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edit_menu_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="메뉴 이름 입력" />
+
+    <EditText
+        android:id="@+id/edit_menu_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="가격 입력"
+        android:inputType="number" />
+
+    <ImageView
+        android:id="@+id/image_menu_photo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/ic_menu_camera" />
+
+    <Button
+        android:id="@+id/button_select_menu_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사진 선택" />
+
+    <Button
+        android:id="@+id/button_save_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저장"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#00C851"
+        android:textColor="#FFFFFF" />
+</LinearLayout>
