@@ -1,0 +1,116 @@
+package com.example.myapplication;
+
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import com.example.myapplication.databinding.FragmentHomeBinding;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+public class HomeFragment extends Fragment {
+
+    public interface OnDateSelectedListener {
+        void onDateSelected(String date);
+    }
+    private OnDateSelectedListener listener;
+
+    private FragmentHomeBinding binding;
+    private List<Button> dateButtons = new ArrayList<>();
+    private Button selectedDateButton = null;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnDateSelectedListener) {
+            listener = (OnDateSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnDateSelectedListener");
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupDateButtons();
+    }
+
+    private void setupDateButtons() {
+        // 날짜 계산을 위한 Calendar 와 Formatter
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM.dd (E)", Locale.KOREAN);
+
+        // 버튼 목록 생성
+        List<Button> allDateButtons = new ArrayList<>();
+        allDateButtons.add(binding.buttonDate1Closed);
+        allDateButtons.add(binding.buttonDate2Closed);
+        allDateButtons.add(binding.buttonDate3);
+        allDateButtons.add(binding.buttonDate4);
+        allDateButtons.add(binding.buttonDate5);
+
+        // 오늘부터 5일간의 날짜를 버튼에 설정
+        for (int i = 0; i < allDateButtons.size(); i++) {
+            Button button = allDateButtons.get(i);
+            String dateText = sdf.format(calendar.getTime());
+
+            if (i == 0) {
+                button.setText("오늘 " + dateText.substring(dateText.indexOf("(")) + "\n휴무");
+            } else if (i == 1) {
+                button.setText("내일 " + dateText.substring(dateText.indexOf("(")) + "\n휴무");
+            } else {
+                button.setText(dateText + "\n예약 가능");
+                // 클릭 가능한 버튼만 리스트에 추가
+                dateButtons.add(button);
+            }
+            // 다음 날로 이동
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        // 클릭 리스너 설정
+        for (Button button : dateButtons) {
+            button.setOnClickListener(v -> selectDateButton(button));
+        }
+
+        // 기본으로 첫 번째 예약 가능 날짜 선택
+        if (!dateButtons.isEmpty()) {
+            selectDateButton(dateButtons.get(0));
+        }
+    }
+
+
+    private void selectDateButton(Button button) {
+        if (selectedDateButton != null) {
+            selectedDateButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
+        }
+        button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorError)));
+        selectedDateButton = button;
+
+        if (listener != null) {
+            listener.onDateSelected(button.getText().toString().split("\n")[0]);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+}
