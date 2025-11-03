@@ -1,0 +1,151 @@
+package kr.ac.doowon.makesalfapp;
+
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+
+public class StoreRegistrationActivity extends AppCompatActivity {
+
+    // --- UI 컴포넌트 ---
+    private EditText editStoreName, editStorePhone, editStoreAddress, editStoreDescription, editDiningDuration;
+    private ImageView imageStorePhoto;
+    private Button buttonAddPhoto, buttonManageMenu, buttonManageNews, buttonSave;
+
+    // --- 테이블 정보 UI ---
+    private EditText editTwoPersonTable, editFourPersonTable;
+    private Button buttonSaveTableInfo;
+
+    // --- 이미지 선택 ---
+    private ActivityResultLauncher<android.content.Intent> galleryLauncher;
+    private Uri selectedImageUri = null;
+
+    // --- SharedPreferences ---
+    private SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "StorePrefs";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_store_registration);
+
+        // --- SharedPreferences 초기화 ---
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        // --- UI 연결 ---
+        initializeViews();
+
+        // --- 갤러리 런처 설정 ---
+        setupGalleryLauncher();
+
+        // --- 클릭 리스너 설정 ---
+        setupClickListeners();
+
+        // --- 저장된 테이블 정보 불러오기 ---
+        loadTableInfo();
+    }
+
+    private void initializeViews() {
+        editStoreName = findViewById(R.id.edit_store_name);
+        editStorePhone = findViewById(R.id.edit_store_phone);
+        editStoreAddress = findViewById(R.id.edit_store_address2);
+        editStoreDescription = findViewById(R.id.edit_store_description);
+        editDiningDuration = findViewById(R.id.edit_dining_duration);
+        imageStorePhoto = findViewById(R.id.image_store_photo);
+        buttonAddPhoto = findViewById(R.id.button_add_store_photo);
+        buttonManageMenu = findViewById(R.id.button_manage_menu);
+        buttonManageNews = findViewById(R.id.button_manage_news);
+        buttonSave = findViewById(R.id.button_save_store_info);
+
+        // --- 테이블 UI 연결 ---
+        editTwoPersonTable = findViewById(R.id.edit_two_person_table);
+        editFourPersonTable = findViewById(R.id.edit_four_person_table);
+        buttonSaveTableInfo = findViewById(R.id.button_save_table_info);
+    }
+
+    private void setupGalleryLauncher() {
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            Glide.with(this)
+                                    .load(selectedImageUri)
+                                    .into(imageStorePhoto);
+                        }
+                    }
+                });
+    }
+
+    private void setupClickListeners() {
+        // 사진 선택
+        buttonAddPhoto.setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            galleryLauncher.launch(intent);
+        });
+
+        // 메뉴 관리
+        buttonManageMenu.setOnClickListener(v -> {
+            Toast.makeText(this, "메뉴 관리 화면 이동 (구현 필요)", Toast.LENGTH_SHORT).show();
+        });
+
+        // 소식 관리
+        buttonManageNews.setOnClickListener(v -> {
+            Toast.makeText(this, "소식 관리 화면 이동 (구현 필요)", Toast.LENGTH_SHORT).show();
+        });
+
+        // 가게 정보 저장
+        buttonSave.setOnClickListener(v -> saveStoreInfo());
+
+        // 테이블 정보 저장
+        buttonSaveTableInfo.setOnClickListener(v -> saveTableInfo());
+    }
+
+    private void saveStoreInfo() {
+        String name = editStoreName.getText().toString().trim();
+        String phone = editStorePhone.getText().toString().trim();
+        String address = editStoreAddress.getText().toString().trim();
+        String description = editStoreDescription.getText().toString().trim();
+        String duration = editDiningDuration.getText().toString().trim();
+
+        if (name.isEmpty() || address.isEmpty()) {
+            Toast.makeText(this, "가게 이름과 주소는 필수입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(this, "가게 정보 저장 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    // --- 테이블 정보 저장 ---
+    private void saveTableInfo() {
+        String twoPerson = editTwoPersonTable.getText().toString().trim();
+        String fourPerson = editFourPersonTable.getText().toString().trim();
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("twoPersonTable", twoPerson);
+        editor.putString("fourPersonTable", fourPerson);
+        editor.apply();
+
+        Toast.makeText(this, "테이블 정보 저장 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    // --- 테이블 정보 불러오기 ---
+    private void loadTableInfo() {
+        String twoPerson = sharedPreferences.getString("twoPersonTable", "0");
+        String fourPerson = sharedPreferences.getString("fourPersonTable", "0");
+
+        editTwoPersonTable.setText(twoPerson);
+        editFourPersonTable.setText(fourPerson);
+    }
+}
