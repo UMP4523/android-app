@@ -1,0 +1,112 @@
+package com.example.myapplication;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.example.myapplication.databinding.FragmentBoardBinding;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+public class BoardFragment extends Fragment {
+
+    private FragmentBoardBinding binding;
+    private BoardAdapter adapter;
+    private ArrayList<BoardPost> postList = new ArrayList<>();
+
+    private static final String PREFS_NAME = "BoardPrefs";
+    private static final String POSTS_KEY = "board_posts";
+
+    // 글쓰기 결과 받기
+    private final ActivityResultLauncher<Intent> writePostLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // 새로 등록된 글까지 다시 로드
+                    loadPosts();
+                    adapter.notifyDataSetChanged();
+                    updateEmptyView();
+                    Toast.makeText(getContext(), "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentBoardBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // RecyclerView 초기화
+        setupRecyclerView();
+
+        // 글쓰기 버튼 클릭
+        binding.fabAddPost.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), BoardWriteActivity.class);
+            writePostLauncher.launch(intent);
+        });
+
+        // 게시글 불러오기
+        loadPosts();
+        updateEmptyView();
+    }
+
+    private void setupRecyclerView() {
+        adapter = new BoardAdapter(getContext(), postList);
+        binding.recyclerViewBoard.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerViewBoard.setAdapter(adapter);
+    }
+
+    // ✅ 저장된 게시글 불러오기
+    private void loadPosts() {
+        String json = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getString(POSTS_KEY, null);
+        if (json != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<BoardPost>>() {}.getType();
+            postList = gson.fromJson(json, type);
+        } else {
+            postList = new ArrayList<>();
+        }
+
+        if (adapter != null) {
+            adapter.setPostList(postList);
+        }
+    }
+
+    private void updateEmptyView() {
+        if (postList.isEmpty()) {
+            binding.textNoPosts.setVisibility(View.VISIBLE);
+            binding.recyclerViewBoard.setVisibility(View.GONE);
+        } else {
+            binding.textNoPosts.setVisibility(View.GONE);
+            binding.recyclerViewBoard.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+}
