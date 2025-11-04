@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="photo_preview_size">100dp</dimen>
+    <dimen name="photo_margin">4dp</dimen>
+</resources>
