@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    tools:context=".BoardDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- 제목 -->
+        <TextView
+            android:id="@+id/text_detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="게시글 제목입니다"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
+
+        <!-- 날짜 -->
+        <TextView
+            android:id="@+id/text_detail_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="2025.10.11"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#E0E0E0"/>
+
+        <!-- 사진이 동적으로 추가될 컨테이너 -->
+        <LinearLayout
+            android:id="@+id/photo_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+        <!-- 내용 -->
+        <TextView
+            android:id="@+id/text_detail_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="게시글 전체 내용입니다..."
+            android:textSize="16sp"
+            android:lineSpacingExtra="6dp"/>
+
+    </LinearLayout>
+</ScrollView>
