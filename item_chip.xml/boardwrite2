@@ -1,0 +1,142 @@
+package com.example.myapplication;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+public class BoardWriteActivity extends AppCompatActivity {
+
+    private EditText editTitle, editContent;
+    private LinearLayout photoContainer;
+    private TextView textCharCount;
+    private ArrayList<String> imageUris = new ArrayList<>();
+
+    private static final int MAX_CONTENT_LENGTH = 1000;
+
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private FirebaseFirestore db;
+    private String storeId; // ✅ 가게 구분용 ID
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_board_write);
+
+        db = FirebaseFirestore.getInstance();
+        storeId = getIntent().getStringExtra("storeId"); // ✅ 가게 ID 받기
+
+        editTitle = findViewById(R.id.edit_post_title);
+        editContent = findViewById(R.id.edit_post_content);
+        photoContainer = findViewById(R.id.photo_container);
+        textCharCount = findViewById(R.id.text_char_count);
+
+        Button addPhotoButton = findViewById(R.id.button_add_photo);
+        Button saveButton = findViewById(R.id.button_save_post);
+
+        // ✅ 글자 수 표시
+        editContent.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int length = s.length();
+                textCharCount.setText(length + " / " + MAX_CONTENT_LENGTH);
+                if (length > MAX_CONTENT_LENGTH)
+                    editContent.setError("1000자 이내로 작성해주세요");
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+
+        // ✅ 갤러리 이미지 선택
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            imageUris.add(selectedImageUri.toString());
+                            addPhotoToContainer(selectedImageUri);
+                        }
+                    }
+                }
+        );
+
+        addPhotoButton.setOnClickListener(v -> openImagePicker());
+        saveButton.setOnClickListener(v -> savePostToFirebase());
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        imagePickerLauncher.launch(intent);
+    }
+
+    private void addPhotoToContainer(Uri imageUri) {
+        ImageView imageView = new ImageView(this);
+        int size = (int) getResources().getDimension(R.dimen.photo_preview_size);
+        int margin = (int) getResources().getDimension(R.dimen.photo_margin);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+        params.setMargins(margin, margin, margin, margin);
+        imageView.setLayoutParams(params);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageURI(imageUri);
+        photoContainer.addView(imageView);
+    }
+
+    // ✅ Firestore 저장 기능
+    private void savePostToFirebase() {
+        String title = editTitle.getText().toString().trim();
+        String content = editContent.getText().toString().trim();
+
+        if (title.isEmpty() || content.isEmpty()) {
+            Toast.makeText(this, "제목과 내용을 입력하세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (content.length() > MAX_CONTENT_LENGTH) {
+            Toast.makeText(this, "내용은 1000자 이내로 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+
+        // ✅ Firestore로 보낼 데이터
+        Map<String, Object> post = new HashMap<>();
+        post.put("storeId", storeId);
+        post.put("title", title);
+        post.put("content", content);
+        post.put("imageUris", imageUris);
+        post.put("date", date);
+
+        db.collection("board_posts")
+                .add(post)
+                .addOnSuccessListener(doc -> {
+                    Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "등록 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+}
