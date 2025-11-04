@@ -1,0 +1,62 @@
+package com.example.myapplication;
+
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.example.myapplication.databinding.ActivityBoardDetailBinding;
+
+import java.util.ArrayList;
+
+public class BoardDetailActivity extends AppCompatActivity {
+
+    private ActivityBoardDetailBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityBoardDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // ✅ BoardPost 객체 받아오기 (Serializable 방식)
+        BoardPost post = (BoardPost) getIntent().getSerializableExtra("post_data");
+
+        if (post != null) {
+            // ✅ 1. 텍스트 데이터 설정
+            binding.textDetailTitle.setText(post.getTitle());
+            binding.textDetailDate.setText(post.getDate());
+            binding.textDetailContent.setText(post.getContent());
+
+            // ✅ 2. 이미지 리스트 불러오기 (BoardPost 수정된 getter명 적용)
+            ArrayList<String> photoUris = post.getImageUris();
+            if (photoUris != null && !photoUris.isEmpty()) {
+                binding.photoContainer.removeAllViews();
+
+                for (String uriString : photoUris) {
+                    ImageView imageView = new ImageView(this);
+
+                    // 이미지뷰 레이아웃 설정
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    params.setMargins(0, 0, 0, 16);
+                    imageView.setLayoutParams(params);
+                    imageView.setAdjustViewBounds(true);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                    // ✅ Glide로 이미지 로드
+                    Glide.with(this)
+                            .load(Uri.parse(uriString))
+                            .into(imageView);
+
+                    // ✅ 레이아웃에 이미지뷰 추가
+                    binding.photoContainer.addView(imageView);
+                }
+            }
+        }
+    }
+}
